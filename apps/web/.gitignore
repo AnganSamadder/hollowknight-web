@@ -1,0 +1,27 @@
+node_modules
+package-lock.json
+yarn.lock
+
+.DS_Store
+.cache
+.vercel
+.output
+.nitro
+/build/
+/api/
+/server/build
+/public/build
+
+# Hollow Knight runtime files (large binaries – run scripts/fetch-runtime.mjs to download)
+/public/runtime/hollow-knight/Build/
+/public/runtime/hollow-knight/StreamingAssets/
+
+# Sentry Config File
+.env.sentry-build-plugin
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+.tanstack
+
+.env.local
