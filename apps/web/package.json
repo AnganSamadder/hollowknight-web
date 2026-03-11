@@ -1,0 +1,47 @@
+{
+  "name": "hollow-knight-web-wrapper",
+  "private": true,
+  "sideEffects": false,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "dev:convex": "bunx convex dev || echo 'Convex: not configured — run bunx convex dev inside apps/web to set up a deployment'",
+    "codegen": "bunx convex codegen --typecheck=disable",
+    "build": "vite build && bunx --bun tsc --noEmit",
+    "preview": "vite preview",
+    "start": "bunx srvx --prod -s ../client dist/server/server.js",
+    "convex:deploy": "bunx convex deploy",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:network": "vitest run tests/convex-fetch.test.ts"
+  },
+  "dependencies": {
+    "@clerk/tanstack-react-start": "^0.27.14",
+    "@tanstack/react-router": "^1.166.3",
+    "@tanstack/react-router-devtools": "^1.166.3",
+    "@tanstack/react-start": "^1.166.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "clsx": "^2.1.1",
+    "convex": "^1.32.0",
+    "jszip": "^3.10.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "srvx": "^0.11.7",
+    "tailwind-merge": "^2.6.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.18",
+    "@types/node": "^22.5.4",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "@vitest/coverage-v8": "^4.0.18",
+    "fake-indexeddb": "^6.2.5",
+    "jsdom": "^28.1.0",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.7.2",
+    "vite": "^7.3.1",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^4.0.18"
+  }
+}
