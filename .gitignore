@@ -1,0 +1,11 @@
+node_modules
+.turbo
+dist
+.DS_Store
+*.local
+*.tsbuildinfo
+
+# env files - never commit secrets
+.env
+.env.local
+.env.*.local
