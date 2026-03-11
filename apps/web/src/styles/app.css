@@ -1,0 +1,118 @@
+@import 'tailwindcss' source('../');
+
+@theme {
+  --color-bg: #0e0e0e;
+  --color-surface: #161616;
+  --color-surface-alt: #1a1a1a;
+  --color-surface-hover: #1e1e1e;
+  --color-canvas: #111111;
+
+  --color-border: #222222;
+  --color-border-strong: #333333;
+
+  --color-fg: #e0e0e0;
+  --color-fg-muted: #888888;
+  --color-fg-dim: #555555;
+  --color-fg-bright: #f0f0f0;
+
+  --color-accent: #b8a472;
+  --color-accent-hover: #c3b182;
+
+  --font-sans: 'General Sans', 'DM Sans', sans-serif;
+
+  --breakpoint-desktop: 55rem;
+
+  --header-height: 57px;
+
+  --animate-fade-in: fade-in 300ms ease-out;
+  --animate-slide-up: slide-up 250ms ease-out;
+  --animate-status-pulse: status-pulse 2s ease-in-out infinite;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes status-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@layer base {
+  html {
+    min-height: 100%;
+    color-scheme: dark;
+  }
+
+  body {
+    min-height: 100%;
+    margin: 0;
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-accent) 28%, transparent);
+    color: var(--color-fg-bright);
+  }
+
+  .using-mouse * {
+    outline: none !important;
+  }
+}
+
+@utility ui-panel {
+  @apply rounded-2xl bg-surface;
+}
+
+@utility ui-card {
+  @apply rounded-xl bg-surface-alt;
+}
+
+@utility ui-eyebrow {
+  @apply text-[0.64rem] font-medium uppercase tracking-[0.32em] text-fg-dim;
+}
+
+@utility ui-btn-primary {
+  @apply inline-flex items-center justify-center rounded-lg bg-accent px-3.5 py-2.5 text-sm font-semibold text-bg transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+@utility ui-btn-secondary {
+  @apply inline-flex items-center justify-center rounded-lg border border-border-strong bg-transparent px-3.5 py-2.5 text-sm font-semibold text-fg transition-colors hover:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+@utility ui-status-pill {
+  @apply inline-flex items-center gap-2 rounded-lg border border-border-strong bg-surface-alt px-3 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-fg-muted;
+}
