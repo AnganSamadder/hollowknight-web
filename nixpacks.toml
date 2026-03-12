@@ -1,0 +1,13 @@
+[phases.setup]
+nixPkgs = ["bun"]
+
+[phases.install]
+cmds = ["bun install --frozen-lockfile"]
+
+[phases.build]
+cmds = [
+  "cd apps/web && bunx convex deploy --cmd 'bun run build'",
+]
+
+[start]
+cmd = "cd apps/web && bun run start"
