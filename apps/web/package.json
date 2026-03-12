@@ -1,5 +1,5 @@
 {
-  "name": "hollow-knight-web-wrapper",
+  "name": "hollowknight-web",
   "private": true,
   "sideEffects": false,
   "type": "module",

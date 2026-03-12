@@ -1,5 +1,5 @@
 {
-  "name": "hallownest-archive",
+  "name": "hollowknight-web",
   "private": true,
   "workspaces": [
     "apps/*"
