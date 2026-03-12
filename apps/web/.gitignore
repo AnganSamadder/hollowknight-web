@@ -4,9 +4,10 @@ yarn.lock
 
 .DS_Store
 .cache
-.vercel
-.output
-.nitro
+.tanstack
+
+# Build outputs
+dist/
 /build/
 /api/
 /server/build
@@ -16,12 +17,7 @@ yarn.lock
 /public/runtime/hollow-knight/Build/
 /public/runtime/hollow-knight/StreamingAssets/
 
-# Sentry Config File
-.env.sentry-build-plugin
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-.tanstack
-
+# env files - never commit secrets
+.env
 .env.local
+.env.*.local
