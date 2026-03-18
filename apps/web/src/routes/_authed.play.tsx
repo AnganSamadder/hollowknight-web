@@ -3,6 +3,7 @@ import type { Id } from '../../convex/_generated/dataModel'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
 import { api } from '../../convex/_generated/api'
+import { PlayFullscreenHint } from '~/components/PlayFullscreenHint'
 import { CANONICAL_SAVE_FILES, RUNTIME_CONFIG, RUNTIME_SLUG } from '~/lib/constants'
 import {
   type RemoteSaveFile,
@@ -43,7 +44,7 @@ function PlayPage() {
   const [preflight, setPreflight] = useState<ReturnType<typeof runPreflight> | null>(null)
   const [bundleResolved, setBundleResolved] = useState(false)
 
-  const controlButtonClass =
+  const controlLinkClass =
     'inline-flex items-center justify-center rounded-lg border border-border-strong bg-transparent px-4 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-fg transition-colors hover:bg-surface-hover'
 
   // Preflight is client-only — keeps SSR and initial client render identical.
@@ -234,13 +235,8 @@ function PlayPage() {
           className={`pointer-events-auto absolute right-3 top-3 flex flex-wrap items-center gap-3 rounded-xl bg-surface-alt p-3 transition-opacity duration-200 ${controlsVisible ? 'opacity-100' : 'opacity-0'}`}
         >
           <div className="flex flex-wrap gap-2">
-            <button
-              className={controlButtonClass}
-              onClick={() => runtimeRef.current?.unity.SetFullscreen?.(1)}
-            >
-              Fullscreen
-            </button>
-            <Link to="/account/saves" className={controlButtonClass}>
+            <PlayFullscreenHint />
+            <Link to="/account/saves" className={controlLinkClass}>
               Saves
             </Link>
           </div>
