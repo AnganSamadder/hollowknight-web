@@ -15,12 +15,18 @@ import {
   Outlet,
   Scripts,
   createRootRoute,
+  useRouterState,
 } from '@tanstack/react-router'
 import { AppProviders } from '~/components/AppProviders'
 import { DefaultCatchBoundary } from '~/components/DefaultCatchBoundary.js'
 import { NotFound } from '~/components/NotFound.js'
 import { ProfileBootstrap } from '~/components/ProfileBootstrap'
 import { APP_NAME } from '~/lib/constants'
+import {
+  getPlayViewportHeight,
+  isLikelyBrowserFullscreen,
+  shouldHidePlayChrome,
+} from '~/lib/play-display'
 import { useRuntimePreload } from '~/lib/runtime-cache'
 import appCss from '~/styles/app.css?url'
 
@@ -126,6 +132,39 @@ function RootComponent() {
 function RootDocument({ children }: { children: React.ReactNode }) {
   const navLinkClass =
     'rounded-md px-2.5 py-1.5 text-sm font-medium tracking-[0.01em] text-fg-muted transition-colors hover:text-fg'
+  const pathname = useRouterState({ select: (state) => state.location.pathname })
+  const [browserFullscreen, setBrowserFullscreen] = React.useState(false)
+
+  React.useEffect(() => {
+    const updateBrowserFullscreen = () => {
+      setBrowserFullscreen(
+        document.fullscreenElement !== null ||
+          isLikelyBrowserFullscreen({
+            innerWidth: window.innerWidth,
+            innerHeight: window.innerHeight,
+            screenWidth: window.screen.width,
+            screenHeight: window.screen.height,
+            screenAvailWidth: window.screen.availWidth,
+            screenAvailHeight: window.screen.availHeight,
+          }),
+      )
+    }
+
+    updateBrowserFullscreen()
+    window.addEventListener('resize', updateBrowserFullscreen)
+    document.addEventListener('fullscreenchange', updateBrowserFullscreen)
+
+    return () => {
+      window.removeEventListener('resize', updateBrowserFullscreen)
+      document.removeEventListener('fullscreenchange', updateBrowserFullscreen)
+    }
+  }, [])
+
+  const hidePlayChrome = shouldHidePlayChrome(pathname, browserFullscreen)
+  const shellStyle = {
+    '--header-height': hidePlayChrome ? '0px' : undefined,
+    '--play-viewport-height': getPlayViewportHeight(hidePlayChrome),
+  } as React.CSSProperties
 
   return (
     <html lang="en">
@@ -133,69 +172,71 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body suppressHydrationWarning>
-        <div className="relative min-h-screen">
-          <header className="sticky top-0 z-40 border-b border-border bg-bg/95 px-4 desktop:px-10">
-            <div className="mx-auto flex w-full max-w-[72rem] items-center justify-between gap-4 py-3.5">
-              <Link
-                to="/"
-                className="flex items-center"
-                activeOptions={{ exact: true }}
-              >
-                <span className="block text-[1rem] font-semibold tracking-[-0.03em] text-fg-bright">
-                  {APP_NAME}
-                </span>
-              </Link>
-              <nav className="hidden items-center gap-1 desktop:flex">
+        <div className="relative min-h-screen" style={shellStyle}>
+          {hidePlayChrome ? null : (
+            <header className="sticky top-0 z-40 border-b border-border bg-bg/95 px-4 desktop:px-10">
+              <div className="mx-auto flex w-full max-w-[72rem] items-center justify-between gap-4 py-3.5">
                 <Link
                   to="/"
-                  className={navLinkClass}
-                  activeProps={{ className: '!text-fg' }}
+                  className="flex items-center"
                   activeOptions={{ exact: true }}
                 >
-                  Home
+                  <span className="block text-[1rem] font-semibold tracking-[-0.03em] text-fg-bright">
+                    {APP_NAME}
+                  </span>
                 </Link>
-                <SignedIn>
+                <nav className="hidden items-center gap-1 desktop:flex">
                   <Link
-                    to="/play"
+                    to="/"
                     className={navLinkClass}
                     activeProps={{ className: '!text-fg' }}
+                    activeOptions={{ exact: true }}
                   >
-                    Play
+                    Home
                   </Link>
-                  <Link
-                    to="/account"
-                    className={navLinkClass}
-                    activeProps={{ className: '!text-fg' }}
-                  >
-                    Account
-                  </Link>
-                  <Link
-                    to="/account/saves"
-                    className={navLinkClass}
-                    activeProps={{ className: '!text-fg' }}
-                  >
-                    Saves
-                  </Link>
-                </SignedIn>
-              </nav>
-              <div className="flex items-center gap-2.5 desktop:gap-3">
-                <SignedIn>
-                  <div className="hidden desktop:block">
-                    <RuntimePreloadIndicator />
-                  </div>
-                  <Link to="/play" className="ui-btn-primary">
-                    Launch
-                  </Link>
-                  <UserButton />
-                </SignedIn>
-                <SignedOut>
-                  <SignInButton mode="modal">
-                    <button className="ui-btn-primary">Sign In</button>
-                  </SignInButton>
-                </SignedOut>
+                  <SignedIn>
+                    <Link
+                      to="/play"
+                      className={navLinkClass}
+                      activeProps={{ className: '!text-fg' }}
+                    >
+                      Play
+                    </Link>
+                    <Link
+                      to="/account"
+                      className={navLinkClass}
+                      activeProps={{ className: '!text-fg' }}
+                    >
+                      Account
+                    </Link>
+                    <Link
+                      to="/account/saves"
+                      className={navLinkClass}
+                      activeProps={{ className: '!text-fg' }}
+                    >
+                      Saves
+                    </Link>
+                  </SignedIn>
+                </nav>
+                <div className="flex items-center gap-2.5 desktop:gap-3">
+                  <SignedIn>
+                    <div className="hidden desktop:block">
+                      <RuntimePreloadIndicator />
+                    </div>
+                    <Link to="/play" className="ui-btn-primary">
+                      Launch
+                    </Link>
+                    <UserButton />
+                  </SignedIn>
+                  <SignedOut>
+                    <SignInButton mode="modal">
+                      <button className="ui-btn-primary">Sign In</button>
+                    </SignInButton>
+                  </SignedOut>
+                </div>
               </div>
-            </div>
-          </header>
+            </header>
+          )}
           <main className="w-full">
             {children}
           </main>

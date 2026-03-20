@@ -218,7 +218,7 @@ function PlayPage() {
     <div className="animate-fade-in">
       <div
         className="relative overflow-hidden bg-canvas"
-        style={{ height: 'calc(100dvh - var(--header-height, 57px))' }}
+        style={{ height: 'var(--play-viewport-height, calc(100dvh - var(--header-height, 57px)))' }}
         onMouseMove={() => setControlsVisible(true)}
         onMouseLeave={() => setControlsVisible(false)}
         suppressHydrationWarning
