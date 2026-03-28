@@ -1,12 +1,12 @@
-export const PLAY_FULLSCREEN_HINT = 'Use F11 for fullscreen. Esc stays in-game.'
+export const PROOF_FULLSCREEN_HINT = 'Use F11 for fullscreen. Esc keeps the worksheet visible.'
 
 const hintClassName =
   'inline-flex items-center justify-center rounded-lg border border-border-strong bg-surface px-4 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-fg-dim'
 
-export function PlayFullscreenHint() {
+export function ProofFullscreenHint() {
   return (
     <span className={hintClassName}>
-      {PLAY_FULLSCREEN_HINT}
+      {PROOF_FULLSCREEN_HINT}
     </span>
   )
 }

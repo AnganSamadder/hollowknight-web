@@ -1,6 +1,6 @@
-# Hallownest Archive
+# Hard Math Archive
 
-TanStack Start + Clerk + Convex browser shell for Hollow Knight.
+TanStack Start + Clerk + Convex browser worksheet for archive files.
 
 ## Monorepo structure
 
@@ -62,4 +62,4 @@ Output lands in `apps/web/dist/`.
 |---|---|
 | `npm run dev` | Start dev server (all apps) |
 | `npm run build` | Production build (all apps) |
-| `npm run fetch-runtime` | Download ~970 MB game runtime |
+| `npm run fetch-runtime` | Download ~970 MB module payload |

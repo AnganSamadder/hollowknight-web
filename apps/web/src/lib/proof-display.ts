@@ -25,12 +25,12 @@ export function isLikelyBrowserFullscreen(options: {
   return widthMatches && heightMatches
 }
 
-export function shouldHidePlayChrome(pathname: string, browserFullscreen: boolean) {
-  return pathname === '/play' && browserFullscreen
+export function shouldHideProofChrome(pathname: string, browserFullscreen: boolean) {
+  return pathname === '/proof' && browserFullscreen
 }
 
-export function getPlayViewportHeight(hidePlayChrome: boolean) {
-  return hidePlayChrome
+export function getProofViewportHeight(hideProofChrome: boolean) {
+  return hideProofChrome
     ? '100dvh'
     : 'calc(100dvh - var(--header-height, 57px))'
 }

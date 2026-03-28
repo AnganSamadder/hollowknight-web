@@ -11,10 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthedRouteImport } from './routes/_authed'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthedPlayRouteImport } from './routes/_authed.play'
+import { Route as AuthedProofRouteImport } from './routes/_authed.proof'
 import { Route as AuthedAccountRouteImport } from './routes/_authed.account'
 import { Route as AuthedAccountIndexRouteImport } from './routes/_authed.account.index'
-import { Route as AuthedAccountSavesRouteImport } from './routes/_authed.account.saves'
+import { Route as AuthedAccountArchiveRouteImport } from './routes/_authed.account.archive'
 
 const AuthedRoute = AuthedRouteImport.update({
   id: '/_authed',
@@ -25,9 +25,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthedPlayRoute = AuthedPlayRouteImport.update({
-  id: '/play',
-  path: '/play',
+const AuthedProofRoute = AuthedProofRouteImport.update({
+  id: '/proof',
+  path: '/proof',
   getParentRoute: () => AuthedRoute,
 } as any)
 const AuthedAccountRoute = AuthedAccountRouteImport.update({
@@ -40,23 +40,23 @@ const AuthedAccountIndexRoute = AuthedAccountIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthedAccountRoute,
 } as any)
-const AuthedAccountSavesRoute = AuthedAccountSavesRouteImport.update({
-  id: '/saves',
-  path: '/saves',
+const AuthedAccountArchiveRoute = AuthedAccountArchiveRouteImport.update({
+  id: '/archive',
+  path: '/archive',
   getParentRoute: () => AuthedAccountRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/account': typeof AuthedAccountRouteWithChildren
-  '/play': typeof AuthedPlayRoute
-  '/account/saves': typeof AuthedAccountSavesRoute
+  '/proof': typeof AuthedProofRoute
+  '/account/archive': typeof AuthedAccountArchiveRoute
   '/account/': typeof AuthedAccountIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/play': typeof AuthedPlayRoute
-  '/account/saves': typeof AuthedAccountSavesRoute
+  '/proof': typeof AuthedProofRoute
+  '/account/archive': typeof AuthedAccountArchiveRoute
   '/account': typeof AuthedAccountIndexRoute
 }
 export interface FileRoutesById {
@@ -64,22 +64,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authed': typeof AuthedRouteWithChildren
   '/_authed/account': typeof AuthedAccountRouteWithChildren
-  '/_authed/play': typeof AuthedPlayRoute
-  '/_authed/account/saves': typeof AuthedAccountSavesRoute
+  '/_authed/proof': typeof AuthedProofRoute
+  '/_authed/account/archive': typeof AuthedAccountArchiveRoute
   '/_authed/account/': typeof AuthedAccountIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/account' | '/play' | '/account/saves' | '/account/'
+  fullPaths: '/' | '/account' | '/proof' | '/account/archive' | '/account/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/play' | '/account/saves' | '/account'
+  to: '/' | '/proof' | '/account/archive' | '/account'
   id:
     | '__root__'
     | '/'
     | '/_authed'
     | '/_authed/account'
-    | '/_authed/play'
-    | '/_authed/account/saves'
+    | '/_authed/proof'
+    | '/_authed/account/archive'
     | '/_authed/account/'
   fileRoutesById: FileRoutesById
 }
@@ -104,11 +104,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authed/play': {
-      id: '/_authed/play'
-      path: '/play'
-      fullPath: '/play'
-      preLoaderRoute: typeof AuthedPlayRouteImport
+    '/_authed/proof': {
+      id: '/_authed/proof'
+      path: '/proof'
+      fullPath: '/proof'
+      preLoaderRoute: typeof AuthedProofRouteImport
       parentRoute: typeof AuthedRoute
     }
     '/_authed/account': {
@@ -125,23 +125,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedAccountIndexRouteImport
       parentRoute: typeof AuthedAccountRoute
     }
-    '/_authed/account/saves': {
-      id: '/_authed/account/saves'
-      path: '/saves'
-      fullPath: '/account/saves'
-      preLoaderRoute: typeof AuthedAccountSavesRouteImport
+    '/_authed/account/archive': {
+      id: '/_authed/account/archive'
+      path: '/archive'
+      fullPath: '/account/archive'
+      preLoaderRoute: typeof AuthedAccountArchiveRouteImport
       parentRoute: typeof AuthedAccountRoute
     }
   }
 }
 
 interface AuthedAccountRouteChildren {
-  AuthedAccountSavesRoute: typeof AuthedAccountSavesRoute
+  AuthedAccountArchiveRoute: typeof AuthedAccountArchiveRoute
   AuthedAccountIndexRoute: typeof AuthedAccountIndexRoute
 }
 
 const AuthedAccountRouteChildren: AuthedAccountRouteChildren = {
-  AuthedAccountSavesRoute: AuthedAccountSavesRoute,
+  AuthedAccountArchiveRoute: AuthedAccountArchiveRoute,
   AuthedAccountIndexRoute: AuthedAccountIndexRoute,
 }
 
@@ -151,12 +151,12 @@ const AuthedAccountRouteWithChildren = AuthedAccountRoute._addFileChildren(
 
 interface AuthedRouteChildren {
   AuthedAccountRoute: typeof AuthedAccountRouteWithChildren
-  AuthedPlayRoute: typeof AuthedPlayRoute
+  AuthedProofRoute: typeof AuthedProofRoute
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedAccountRoute: AuthedAccountRouteWithChildren,
-  AuthedPlayRoute: AuthedPlayRoute,
+  AuthedProofRoute: AuthedProofRoute,
 }
 
 const AuthedRouteWithChildren =

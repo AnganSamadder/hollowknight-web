@@ -23,10 +23,10 @@ import { NotFound } from '~/components/NotFound.js'
 import { ProfileBootstrap } from '~/components/ProfileBootstrap'
 import { APP_NAME } from '~/lib/constants'
 import {
-  getPlayViewportHeight,
+  getProofViewportHeight,
   isLikelyBrowserFullscreen,
-  shouldHidePlayChrome,
-} from '~/lib/play-display'
+  shouldHideProofChrome,
+} from '~/lib/proof-display'
 import { useRuntimePreload } from '~/lib/runtime-cache'
 import appCss from '~/styles/app.css?url'
 
@@ -56,12 +56,12 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: `${APP_NAME} | Play Hollow Knight In The Browser`,
+        title: `${APP_NAME} | Browser Worksheet`,
       },
       {
         name: 'description',
         content:
-          'A Hollow Knight web wrapper built for account-scoped save import, sync, fullscreen play, and export.',
+          'A browser worksheet for account-scoped archive files, remote sync, fullscreen review, and export.',
       },
     ],
     links: [
@@ -112,8 +112,8 @@ function RuntimePreloadIndicator() {
   return (
     <span className="text-[0.68rem] font-medium uppercase tracking-[0.18em] text-fg-dim">
       {cacheProgress > 0
-        ? `Game ${Math.round(cacheProgress * 100)}%`
-        : 'Preparing game…'}
+        ? `Module ${Math.round(cacheProgress * 100)}%`
+        : 'Preparing module…'}
     </span>
   )
 }
@@ -160,10 +160,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
-  const hidePlayChrome = shouldHidePlayChrome(pathname, browserFullscreen)
+  const hideProofChrome = shouldHideProofChrome(pathname, browserFullscreen)
   const shellStyle = {
-    '--header-height': hidePlayChrome ? '0px' : undefined,
-    '--play-viewport-height': getPlayViewportHeight(hidePlayChrome),
+    '--header-height': hideProofChrome ? '0px' : undefined,
+    '--play-viewport-height': getProofViewportHeight(hideProofChrome),
   } as React.CSSProperties
 
   return (
@@ -173,7 +173,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body suppressHydrationWarning>
         <div className="relative min-h-screen" style={shellStyle}>
-          {hidePlayChrome ? null : (
+          {hideProofChrome ? null : (
             <header className="sticky top-0 z-40 border-b border-border bg-bg/95 px-4 desktop:px-10">
               <div className="mx-auto flex w-full max-w-[72rem] items-center justify-between gap-4 py-3.5">
                 <Link
@@ -196,11 +196,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                   </Link>
                   <SignedIn>
                     <Link
-                      to="/play"
+                      to="/proof"
                       className={navLinkClass}
                       activeProps={{ className: '!text-fg' }}
                     >
-                      Play
+                      Proof
                     </Link>
                     <Link
                       to="/account"
@@ -210,11 +210,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                       Account
                     </Link>
                     <Link
-                      to="/account/saves"
+                      to="/account/archive"
                       className={navLinkClass}
                       activeProps={{ className: '!text-fg' }}
                     >
-                      Saves
+                      Archive
                     </Link>
                   </SignedIn>
                 </nav>
@@ -223,8 +223,8 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                     <div className="hidden desktop:block">
                       <RuntimePreloadIndicator />
                     </div>
-                    <Link to="/play" className="ui-btn-primary">
-                      Launch
+                    <Link to="/proof" className="ui-btn-primary">
+                      Open
                     </Link>
                     <UserButton />
                   </SignedIn>

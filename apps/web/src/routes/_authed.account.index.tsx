@@ -25,16 +25,16 @@ function AccountPage() {
             Your archive
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-fg-muted">
-            Review your profile, check the active cloud bundle, and jump directly into
-            play or save management.
+            Review your profile, inspect the active remote bundle, and jump directly into
+            worksheet or archive tools.
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
-          <Link to="/play" className="ui-btn-primary">
-            Launch game
+          <Link to="/proof" className="ui-btn-primary">
+            Open Worksheet
           </Link>
-          <Link to="/account/saves" className="ui-btn-secondary">
-            Manage saves
+          <Link to="/account/archive" className="ui-btn-secondary">
+            Archive Files
           </Link>
         </div>
       </section>
@@ -66,9 +66,9 @@ function AccountPage() {
 
         <div className="ui-panel overflow-hidden">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-4">
-            <h2 className="text-base font-semibold text-fg">Save Cloud</h2>
-            <Link to="/account/saves" className="ui-btn-secondary">
-              Manage saves →
+            <h2 className="text-base font-semibold text-fg">Remote Bundle</h2>
+            <Link to="/account/archive" className="ui-btn-secondary">
+              Archive Files →
             </Link>
           </div>
           <div className="p-5">
@@ -76,16 +76,16 @@ function AccountPage() {
               <p className="text-sm text-fg-dim">Loading…</p>
             ) : bundle === null || !rev ? (
               <p className="text-sm leading-7 text-fg-dim">
-                No save data yet.{' '}
-                <Link to="/play" className="text-accent transition-colors hover:text-accent-hover">
-                  Play to create saves
+                No archive data yet.{' '}
+                <Link to="/proof" className="text-accent transition-colors hover:text-accent-hover">
+                  Open the worksheet to generate files
                 </Link>{' '}
                 or{' '}
                 <Link
-                  to="/account/saves"
+                  to="/account/archive"
                   className="text-accent transition-colors hover:text-accent-hover"
                 >
-                  import existing ones
+                  import local ones
                 </Link>
                 .
               </p>
@@ -113,7 +113,7 @@ function AccountPage() {
                 )}
                 {bundle.lastPlayedAt && (
                   <div className={detailRowClass}>
-                    <dt className="text-sm text-fg-dim">Last played</dt>
+                    <dt className="text-sm text-fg-dim">Last opened</dt>
                     <dd className="text-sm text-fg">{formatDateTime(bundle.lastPlayedAt)}</dd>
                   </div>
                 )}

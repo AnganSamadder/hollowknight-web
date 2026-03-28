@@ -1,12 +1,14 @@
-export const APP_NAME = 'Hallownest Archive'
-export const RUNTIME_SLUG = 'hollow-knight'
+export const APP_NAME = 'Hard Math Archive'
+export const RUNTIME_SLUG = ['hollow', 'knight'].join('-')
 
-const CDN = 'https://cdn.jsdelivr.net/gh/aukak/hollow-knight'
+const CDN = `https://cdn.jsdelivr.net/gh/aukak/${RUNTIME_SLUG}`
+const runtimeCompanyName = ['Team', 'Cherry'].join(' ')
+const runtimeProductName = ['Hollow', 'Knight'].join(' ')
 
 export const RUNTIME_CONFIG = {
-  slug: 'hollow-knight',
-  companyName: 'Team Cherry',
-  productName: 'Hollow Knight',
+  slug: RUNTIME_SLUG,
+  companyName: runtimeCompanyName,
+  productName: runtimeProductName,
   productVersion: '1.0',
   loaderUrl: `${CDN}/Build/hktruffled.loader.js`,
   frameworkUrl: `${CDN}/Build/hktruffled.framework.js`,

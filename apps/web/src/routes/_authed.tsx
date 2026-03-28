@@ -16,14 +16,14 @@ export const Route = createFileRoute('/_authed')({
             <div className="grid gap-6 desktop:grid-cols-[minmax(0,1fr)_20rem] desktop:gap-8">
               <div>
                 <h1 className="text-3xl font-semibold tracking-tight text-fg-bright">
-                  Sign in to continue your save.
+                  Sign in to continue your archive.
                 </h1>
                 <p className="mt-3 max-w-2xl text-sm leading-7 text-fg-muted">
-                  This route is tied to your account-scoped Hollow Knight save bundle.
+                  This route is tied to your account-scoped archive bundle.
                 </p>
               </div>
               <div className="ui-card hidden p-5 text-sm leading-7 text-fg-muted desktop:block">
-                Your profile, runtime state, and cloud revisions stay scoped to the active Clerk account.
+                Your profile, module state, and remote snapshots stay scoped to the active Clerk account.
               </div>
             </div>
             <div className="ui-card mt-8 overflow-hidden p-4">

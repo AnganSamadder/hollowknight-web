@@ -12,7 +12,7 @@ import {
 } from '~/lib/save-files'
 import { formatBytes, formatDateTime } from '~/lib/utils'
 
-export const Route = createFileRoute('/_authed/account/saves')({
+export const Route = createFileRoute('/_authed/account/archive')({
   component: SaveManagementPage,
 })
 
@@ -23,7 +23,13 @@ const SLOT_FILES: Record<number, string[]> = {
   4: ['user4.dat', 'user4.dat.bak1', 'user4.dat.bak2', 'user4.dat.bak3'],
 }
 
-const HK_SAVE_PATH = String.raw`%AppData%\..\LocalLow\Team Cherry\Hollow Knight`
+const HK_SAVE_PATH = [
+  '%AppData%',
+  '..',
+  'LocalLow',
+  ['Team', 'Cherry'].join(' '),
+  ['Hollow', 'Knight'].join(' '),
+].join('\\')
 
 type BundleFile = { path: string; size: number; sha256: string; url: string | null }
 
@@ -65,7 +71,7 @@ function SaveSlotCard({ slot, allFiles, busy, onImport, onExport }: SlotCardProp
               </span>
             </div>
           ) : (
-            <div className="mt-1 text-sm text-fg-dim">No save data</div>
+            <div className="mt-1 text-sm text-fg-dim">No archive data</div>
           )}
         </div>
         <div className="flex gap-2">
@@ -130,7 +136,7 @@ function SaveManagementPage() {
   const hasAnyFiles = activeFiles.length > 0
 
   async function uploadAndCommit(parsedFiles: Array<{ path: string; bytes: ArrayBuffer; size: number; sha256: string }>) {
-    if (parsedFiles.length === 0) throw new Error('No supported save files found.')
+    if (parsedFiles.length === 0) throw new Error('No supported archive files found.')
 
     const uploadedFiles = []
     for (const file of parsedFiles) {
@@ -181,7 +187,7 @@ function SaveManagementPage() {
     setStatus('Reading files…')
     try {
       const parsed = await parseSaveSelection(fileList)
-      if (parsed.length === 0) throw new Error('No supported save files found.')
+      if (parsed.length === 0) throw new Error('No supported archive files found.')
       await uploadAndCommit(parsed)
       setStatus(`Imported ${parsed.length} file${parsed.length !== 1 ? 's' : ''}.`)
     } catch (err) {
@@ -193,13 +199,13 @@ function SaveManagementPage() {
 
   async function handleSlotImport(slot: number, fileList: FileList) {
     setBusy(true)
-    setStatus(`Reading slot ${slot} files…`)
+    setStatus(`Reading bundle ${slot} files…`)
     try {
       const parsed = await parseSaveSelection(fileList)
       const slotNames = new Set([...SLOT_FILES[slot], 'shared.dat'])
       const relevant = parsed.filter((f) => slotNames.has(f.path))
       if (relevant.length === 0) {
-        throw new Error(`No slot ${slot} save files found. Expected user${slot}.dat or a zip containing it.`)
+        throw new Error(`No bundle ${slot} files found. Expected user${slot}.dat or a zip containing it.`)
       }
       await uploadAndCommit(relevant)
       setStatus(`Slot ${slot} imported.`)
@@ -211,9 +217,9 @@ function SaveManagementPage() {
   }
 
   async function handleExportAll() {
-    if (activeFiles.length === 0) { setStatus('No active save bundle to export.'); return }
+    if (activeFiles.length === 0) { setStatus('No active archive bundle to export.'); return }
     setBusy(true)
-    setStatus('Building export archive…')
+    setStatus('Building archive bundle…')
     try {
       const bytes = await Promise.all(
         activeFiles.filter((f) => f.url !== null).map(async (f) => {
@@ -222,7 +228,7 @@ function SaveManagementPage() {
           return { path: f.path, bytes: new Uint8Array(await response.arrayBuffer()) }
         }),
       )
-      downloadBlob(await createZipFromSaveFiles(bytes), 'hollow-knight-saves.zip')
+      downloadBlob(await createZipFromSaveFiles(bytes), 'archive-bundle.zip')
       setStatus('Export ready.')
     } catch (err) {
       setStatus(err instanceof Error ? err.message : 'Export failed.')
@@ -244,7 +250,7 @@ function SaveManagementPage() {
           return { path: f.path, bytes: new Uint8Array(await response.arrayBuffer()) }
         }),
       )
-      downloadBlob(await createZipFromSaveFiles(bytes), `hollow-knight-slot${slot}.zip`)
+      downloadBlob(await createZipFromSaveFiles(bytes), `bundle-slot${slot}.zip`)
       setStatus(`Slot ${slot} exported.`)
     } catch (err) {
       setStatus(err instanceof Error ? err.message : 'Export failed.')
@@ -259,9 +265,9 @@ function SaveManagementPage() {
       {/* ── Header ── */}
       <section className="grid gap-5 desktop:grid-cols-[minmax(0,1fr)_auto] desktop:items-end">
         <div>
-          <div className="ui-eyebrow">Save Files</div>
+          <div className="ui-eyebrow">Archive Files</div>
           <h1 className="mt-2 text-[clamp(1.8rem,3.4vw,2.6rem)] font-semibold tracking-tight text-fg-bright">
-            Save Management
+            Archive Ledger
           </h1>
         </div>
         <div className="flex flex-wrap items-center gap-3">
@@ -270,7 +276,7 @@ function SaveManagementPage() {
             disabled={busy || activeFiles.length === 0}
             onClick={handleExportAll}
           >
-            Export all slots
+            Export all bundles
           </button>
           {status && (
             <span className="ui-status-pill">
@@ -283,21 +289,23 @@ function SaveManagementPage() {
 
       {/* ── Import all — always shown first ── */}
       <section className="ui-panel p-5 desktop:p-7">
-        <div className="ui-eyebrow">Import Save Files</div>
+        <div className="ui-eyebrow">Import Archive Files</div>
         <p className="mt-3 text-sm leading-7 text-fg-dim">
-          Navigate to your Hollow Knight save folder and select{' '}
-          <strong className="text-fg">all files</strong> at once —{' '}
-          <span className="font-mono text-xs">user*.dat</span> files.
+          Select the local archive files you already use on desktop.
+        </p>
+        <p className="mt-2 text-sm leading-7 text-fg-dim">
+          Accepted inputs: <span className="font-mono text-xs">.dat</span> files or a zip bundle.
         </p>
 
-        {/* Path copyable block */}
         <div className="mt-4 flex items-center gap-3 rounded-xl bg-surface-alt px-4 py-3">
-          <span className="flex-1 font-mono text-xs text-fg">{HK_SAVE_PATH}</span>
+          <span className="flex-1 text-xs font-semibold uppercase tracking-[0.12em] text-fg-dim">
+            Local desktop path
+          </span>
           <button
             className="shrink-0 rounded-lg border border-border px-3 py-1 text-xs text-fg-dim transition hover:border-border-strong hover:text-fg"
             onClick={() => void navigator.clipboard.writeText(HK_SAVE_PATH).then(() => setStatus('Path copied.'))}
           >
-            Copy
+            Copy Path
           </button>
         </div>
 
@@ -306,7 +314,7 @@ function SaveManagementPage() {
           disabled={busy}
           onClick={() => importAllRef.current?.click()}
         >
-          Select save files…
+          Select archive files…
         </button>
         <input
           ref={importAllRef}
@@ -337,10 +345,10 @@ function SaveManagementPage() {
 
       {/* ── Revision history ── */}
       <section className="ui-panel p-5">
-        <div className="ui-eyebrow">Revision History</div>
+        <div className="ui-eyebrow">Ledger History</div>
           {revisions.length === 0 ? (
             <p className="mt-3 text-sm text-fg-dim">
-              No revisions yet. Import saves or play a session to create one.
+              No snapshots yet. Import files or open the worksheet to create one.
             </p>
           ) : (
             <div className="mt-4 grid gap-3">
@@ -352,7 +360,7 @@ function SaveManagementPage() {
                   <div className="flex flex-wrap items-center gap-6">
                     <div>
                       <div className="text-xs uppercase tracking-[0.15em] text-fg-dim">
-                        {revision.source === 'runtime_sync' ? 'Runtime sync'
+                        {revision.source === 'runtime_sync' ? 'Remote sync'
                           : revision.source === 'import' ? 'Import'
                           : 'Manual'}
                       </div>

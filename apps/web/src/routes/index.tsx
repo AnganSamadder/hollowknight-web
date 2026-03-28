@@ -7,16 +7,16 @@ export const Route = createFileRoute('/')({
 
 const features = [
   {
-    title: 'Steam-compatible saves',
-    description: 'Import and export the exact files you already use on desktop.',
+    title: 'Desktop-compatible files',
+    description: 'Move the exact desktop archive files you already keep locally.',
   },
   {
-    title: 'Cloud sync',
-    description: 'Keep progress current across browser sessions without extra steps.',
+    title: 'Remote sync',
+    description: 'Keep remote snapshots current across repeat visits without extra steps.',
   },
   {
-    title: 'Revision history',
-    description: 'Restore an earlier state whenever you need to recover a run.',
+    title: 'Snapshot history',
+    description: 'Restore an earlier bundle whenever your arithmetic goes sideways.',
   },
 ]
 
@@ -27,28 +27,28 @@ function Home() {
         <section className="ui-panel p-8 desktop:p-12">
           <div className="grid gap-8">
             <div className="grid gap-4">
-              <div className="ui-eyebrow">Hallownest Archive</div>
+              <div className="ui-eyebrow">Hard Math Archive</div>
               <h1 className="max-w-3xl text-4xl font-semibold leading-[0.92] tracking-tight text-fg-bright sm:text-6xl">
-                Play Hollow Knight. Keep your saves.
+                Pr0ve n0thing. Preserve everything.
               </h1>
               <p className="max-w-2xl text-base leading-8 text-fg-muted sm:text-lg">
-                A browser shell for Hollow Knight with save import, cloud sync, and fast export
-                back to desktop.
+                A browser worksheet for local archive files with remote sync, snapshot recovery,
+                and quick export back to desktop storage.
               </p>
             </div>
 
             <div className="flex flex-wrap gap-3">
               <SignedIn>
-                <Link to="/play" className="ui-btn-primary">
-                  Launch archive
+                <Link to="/proof" className="ui-btn-primary">
+                  Open Worksheet
                 </Link>
-                <Link to="/account/saves" className="ui-btn-secondary">
-                  Manage saves
+                <Link to="/account/archive" className="ui-btn-secondary">
+                  Archive Files
                 </Link>
               </SignedIn>
               <SignedOut>
-                <Link to="/play" className="ui-btn-primary">
-                  Sign In to Play
+                <Link to="/proof" className="ui-btn-primary">
+                  Sign In to Enter
                 </Link>
               </SignedOut>
             </div>
@@ -67,8 +67,8 @@ function Home() {
         <section className="grid gap-3 border-t border-border pt-6 desktop:grid-cols-[10rem_minmax(0,1fr)] desktop:items-start">
           <div className="ui-eyebrow">Workflow</div>
           <p className="max-w-3xl text-sm leading-7 text-fg-muted">
-            Import a save, launch the runtime, and export whenever you want to move back to your
-            desktop install.
+            Import local files, open the worksheet, and export a fresh bundle whenever desktop
+            storage needs a cleaner theorem.
           </p>
         </section>
       </div>

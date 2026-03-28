@@ -3,7 +3,7 @@ import type { Id } from '../../convex/_generated/dataModel'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
 import { api } from '../../convex/_generated/api'
-import { PlayFullscreenHint } from '~/components/PlayFullscreenHint'
+import { ProofFullscreenHint } from '~/components/ProofFullscreenHint'
 import { CANONICAL_SAVE_FILES, RUNTIME_CONFIG, RUNTIME_SLUG } from '~/lib/constants'
 import {
   type RemoteSaveFile,
@@ -18,11 +18,11 @@ import {
 import { toArrayBuffer } from '~/lib/save-files'
 import { formatDateTime } from '~/lib/utils'
 
-export const Route = createFileRoute('/_authed/play')({
-  component: PlayPage,
+export const Route = createFileRoute('/_authed/proof')({
+  component: ProofPage,
 })
 
-function PlayPage() {
+function ProofPage() {
   const runtimeBundle = useQuery(api.saves.getLaunchBundle, { runtimeSlug: RUNTIME_SLUG })
   const markPlayed = useMutation(api.saves.markRuntimeSessionStarted)
   const generateUploadUrl = useMutation(api.saves.generateImportUploadUrl)
@@ -125,7 +125,7 @@ function PlayPage() {
         })
 
         setRuntimeReady(true)
-        setStatus('Running')
+        setStatus('Active')
 
         // ── syncNow: reads saves from IDB (not Unity FS) ─────────────────────
         const syncNow = async () => {
@@ -193,7 +193,7 @@ function PlayPage() {
       .catch((err: unknown) => {
         if (!cancelled) {
           const msg = err instanceof Error ? err.message : String(err)
-          setError(msg || 'Runtime launch failed — check console.')
+          setError(msg || 'Module open failed. Check console.')
         }
       })
 
@@ -235,9 +235,9 @@ function PlayPage() {
           className={`pointer-events-auto absolute right-3 top-3 flex flex-wrap items-center gap-3 rounded-xl bg-surface-alt p-3 transition-opacity duration-200 ${controlsVisible ? 'opacity-100' : 'opacity-0'}`}
         >
           <div className="flex flex-wrap gap-2">
-            <PlayFullscreenHint />
-            <Link to="/account/saves" className={controlLinkClass}>
-              Saves
+            <ProofFullscreenHint />
+            <Link to="/account/archive" className={controlLinkClass}>
+              Archive
             </Link>
           </div>
           <span className="ui-status-pill">
@@ -250,12 +250,12 @@ function PlayPage() {
         {preflight && !preflight.browserSupported ? (
           <div className="absolute inset-0 grid place-items-center p-6">
             <div className="ui-panel w-full max-w-2xl p-6 desktop:p-8">
-              <div className="ui-eyebrow">Unsupported Device</div>
+              <div className="ui-eyebrow">Unsupported Environment</div>
               <h1 className="mt-2 text-[clamp(1.8rem,3.5vw,2.4rem)] font-semibold tracking-tight text-fg-bright">
                 Desktop browsers only.
               </h1>
               <p className="mt-3 text-sm leading-7 text-fg-muted">
-                This wrapper is optimized for desktop Chrome, Edge, and Firefox. Mobile devices are not supported.
+                This worksheet is optimized for desktop Chrome, Edge, and Firefox. Mobile browsers are not supported.
               </p>
             </div>
           </div>
@@ -265,9 +265,9 @@ function PlayPage() {
         {error ? (
           <div className="absolute inset-0 grid place-items-center p-6">
             <div className="ui-panel w-full max-w-2xl p-6 desktop:p-8">
-              <div className="ui-eyebrow">Runtime Error</div>
+              <div className="ui-eyebrow">Module Error</div>
               <h1 className="mt-2 text-[clamp(1.8rem,3.5vw,2.4rem)] font-semibold tracking-tight text-fg-bright">
-                Unable to launch.
+                Unable to open module.
               </h1>
               <p className="mt-3 text-sm leading-7 text-fg-muted">{error}</p>
               <div className="mt-6">
@@ -306,9 +306,9 @@ function PlayPage() {
 
                   {conflict ? (
                     <div className="mt-4 rounded-xl border border-border-strong bg-surface-alt p-4">
-                      <div className="ui-eyebrow">Save conflict</div>
+                      <div className="ui-eyebrow">Archive conflict</div>
                       <p className="mt-2 text-sm leading-7 text-fg-muted">
-                        Local progress differs from cloud. Choose which version to keep.
+                        Local files differ from the remote bundle. Choose which version to keep.
                       </p>
                       <div className="mt-3 flex flex-wrap gap-3">
                         <button
@@ -321,7 +321,7 @@ function PlayPage() {
                           className={`ui-btn-primary ${resolution === 'cloud' ? 'ring-2 ring-fg/30' : ''}`}
                           onClick={() => setResolution('cloud')}
                         >
-                          Use cloud
+                          Use remote
                         </button>
                       </div>
                     </div>
@@ -330,9 +330,9 @@ function PlayPage() {
               ) : (
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <div className="ui-eyebrow">Cloud bundle</div>
+                    <div className="ui-eyebrow">Remote bundle</div>
                     <div className="mt-1 text-sm text-fg">
-                      {runtimeBundle?.activeRevision?.bundleHash.slice(0, 16) ?? 'No cloud saves yet'}
+                      {runtimeBundle?.activeRevision?.bundleHash.slice(0, 16) ?? 'No remote files yet'}
                     </div>
                   </div>
                   {runtimeBundle?.lastSyncedAt ? (
