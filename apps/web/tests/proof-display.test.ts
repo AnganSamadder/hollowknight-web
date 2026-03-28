@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import {
-  getPlayViewportHeight,
+  getProofViewportHeight,
   isLikelyBrowserFullscreen,
-  shouldHidePlayChrome,
-} from '~/lib/play-display'
+  shouldHideProofChrome,
+} from '~/lib/proof-display'
 
-describe('play display helpers', () => {
+describe('proof display helpers', () => {
   it('treats a screen-sized viewport as browser fullscreen', () => {
     expect(
       isLikelyBrowserFullscreen({
@@ -28,14 +28,14 @@ describe('play display helpers', () => {
     ).toBe(false)
   })
 
-  it('only hides play chrome for the play route in fullscreen mode', () => {
-    expect(shouldHidePlayChrome('/play', true)).toBe(true)
-    expect(shouldHidePlayChrome('/play', false)).toBe(false)
-    expect(shouldHidePlayChrome('/account', true)).toBe(false)
+  it('only hides proof chrome for the proof route in fullscreen mode', () => {
+    expect(shouldHideProofChrome('/proof', true)).toBe(true)
+    expect(shouldHideProofChrome('/proof', false)).toBe(false)
+    expect(shouldHideProofChrome('/account', true)).toBe(false)
   })
 
-  it('uses full viewport height when play chrome is hidden', () => {
-    expect(getPlayViewportHeight(true)).toBe('100dvh')
-    expect(getPlayViewportHeight(false)).toBe('calc(100dvh - var(--header-height, 57px))')
+  it('uses full viewport height when proof chrome is hidden', () => {
+    expect(getProofViewportHeight(true)).toBe('100dvh')
+    expect(getProofViewportHeight(false)).toBe('calc(100dvh - var(--header-height, 57px))')
   })
 })
